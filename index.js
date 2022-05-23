@@ -79,7 +79,8 @@ const movies = [
 ];
 app.use(cors({ origin: "*" }));
 app.use(express.json());
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
+
 const MONGO_URL = process.env.MONGO_URL;
 
 async function CreateConnection() {

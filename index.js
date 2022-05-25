@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
+import { putMovies,postMovie,getAllMovies,deletefunction,getMoviebyId } from "./helper.js";
 console.log(process.env.MONGO_URL);
 const app = express();
 const movies = [
@@ -85,7 +86,7 @@ async function CreateConnection() {
   console.log("mongodb is connected😁");
   return client;
 }
-const client = await CreateConnection();
+export const client = await CreateConnection();
 app.get("/", (req, res) => {
   res.send("hello 😂world");
 });
@@ -95,10 +96,7 @@ app.get("/movies", (req, res) => {
 app.get("/movies/:id", async function (req, res) {
   console.log(req.params);
   const { id } = req.params;
-  const movie = await client
-    .db("b30wd")
-    .collection("movies")
-    .findOne({ id: id });
+  const movie = await getMoviebyId(id);
   console.log(movie);
   movie
     ? res.send(movie)
@@ -107,34 +105,24 @@ app.get("/movies/:id", async function (req, res) {
 app.delete("/movies/:id", async function (req, res) {
   console.log(req.params);
   const { id } = req.params;
-  const resultt = await client
-    .db("b30wd")
-    .collection("movies")
-    .deleteOne({ id: id });
+  const resultt = await deletefunction(id);
   res.send(resultt);
 });
 app.get("/moviesall", async function (req, res) {
-  const results = await client
-    .db("b30wd")
-    .collection("movies")
-    .find({})
-    .toArray();
+  const results = await getAllMovies();
   res.send(results);
 });
 app.post("/movies", async function (req, res) {
   const data = req.body;
   console.log(data);
-  const result = await client.db("b30wd").collection("movies").insertMany(data);
+  const result = await postMovie(data);
   res.send(result);
 });
 app.put("/movies/:id", async function (req, res) {
   console.log(req.params);
   const { id } = req.params;
   const updatedata = req.body;
-  const resultt = await client
-    .db("b30wd")
-    .collection("movies")
-    .updateOne({ id: id }, { $set: updatedata });
+  const resultt = await putMovies(id, updatedata);
   res.send(resultt);
 });
 

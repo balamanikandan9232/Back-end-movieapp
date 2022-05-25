@@ -4,9 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 console.log(process.env.MONGO_URL);
-
 const app = express();
-
 const movies = [
   {
     id: "100",
@@ -79,10 +77,8 @@ const movies = [
 ];
 app.use(cors({ origin: "*" }));
 app.use(express.json());
-const PORT = process.env.PORT;
-
+const PORT = process.env.PORT || 4000;
 const MONGO_URL = process.env.MONGO_URL;
-
 async function CreateConnection() {
   const client = new MongoClient(MONGO_URL);
   await client.connect();
